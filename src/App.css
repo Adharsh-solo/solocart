@@ -52,9 +52,8 @@ body {
 .nav-logo {
   height: 40px;
   width: 40px;
-  object-fit: contain;
+  object-fit: cover;
   border-radius: 50%;
-  /* if logo is square, it will make it circular. remove if not needed */
 }
 
 .cart-text {

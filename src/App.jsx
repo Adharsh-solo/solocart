@@ -27,27 +27,26 @@ function App() {
 
   const categories = ['all', 'Beauty', "Men's wear", "Women's wear", 'Sneakers'];
 
-  // Filter products based on search query and category
-  const filteredProducts = useMemo(() => {
+  // Filter for grid (only by category)
+  const gridProducts = useMemo(() => {
     return productsData.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      let matchesCategory = false;
-      if (selectedCategory === 'all') {
-        matchesCategory = true;
-      } else if (selectedCategory === 'Sneakers') {
-        matchesCategory = product.category === "Men's Sneakers" || product.category === "Women's Sneakers";
-      } else {
-        matchesCategory = product.category === selectedCategory;
-      }
-      
-      return matchesSearch && matchesCategory;
+      if (selectedCategory === 'all') return true;
+      if (selectedCategory === 'Sneakers') return product.category === "Men's Sneakers" || product.category === "Women's Sneakers";
+      return product.category === selectedCategory;
     });
-  }, [searchQuery, selectedCategory]);
+  }, [selectedCategory]);
+
+  // Filter for search (only by search query)
+  const searchProducts = useMemo(() => {
+    if (!searchQuery) return [];
+    return productsData.filter(product => 
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [searchQuery]);
 
   return (
     <div className="app">
-      <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} filteredProducts={filteredProducts} />
+      <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} filteredProducts={searchProducts} />
       <Hero />
       <div className="container">
         <div className="filter-bar">
@@ -68,15 +67,15 @@ function App() {
           <div className="container">
             <h2 className="section-heading">Men's Sneakers</h2>
           </div>
-          <ProductGrid products={filteredProducts.filter(p => p.category === "Men's Sneakers")} />
+          <ProductGrid products={gridProducts.filter(p => p.category === "Men's Sneakers")} />
           
           <div className="container">
             <h2 className="section-heading">Women's Sneakers</h2>
           </div>
-          <ProductGrid products={filteredProducts.filter(p => p.category === "Women's Sneakers")} />
+          <ProductGrid products={gridProducts.filter(p => p.category === "Women's Sneakers")} />
         </>
       ) : (
-        <ProductGrid products={filteredProducts} />
+        <ProductGrid products={gridProducts} />
       )}
       <Footer />
 

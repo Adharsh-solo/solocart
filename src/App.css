@@ -174,10 +174,14 @@ body {
     gap: 0.5rem;
   }
 
-  .nav-search.expanded .search-input {
-    max-width: none;
+  .nav-search.expanded .search-input-wrapper {
     flex-grow: 1;
     margin-right: 0.5rem;
+  }
+
+  .nav-search.expanded .search-input {
+    max-width: none;
+    width: 100%;
   }
 
   .mobile-search-close {
